@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">WeatherApplication</string>
+    <string name="base_url">https://api.openweathermap.org/data/2.5/</string>
+    <string name="weather_min_max">Max: %1$s°C - Min: %2$s°C</string>
+    <string name="history_header_item">Recently searched:</string>
+    <string name="city_header_item">Search results:</string>
+    <string name="city_name_error">Text is not a city name</string>
+    <string name="text_no_result">No cities matching search.</string>
+    <string name="text_no_history">No search history available</string>
+    <string name="forecast_header_item">Forecast:</string>
+    <string name="error_history">Error occurred during history display.</string>
+    <string name="error_search">Error occurred during search data download.</string>
+    <string name="error_city_weather">Can\'t download weather data for city</string>
+    <string name="error_forecast">Can\'t download forecast for city</string>
+</resources>

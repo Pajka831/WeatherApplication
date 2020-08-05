@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/searchCityFragment">
+
+    <fragment
+        android:id="@+id/searchCityFragment"
+        android:name="com.mpaja.weatherapplication.ui.searchcity.SearchCityFragment"
+        android:label="SearchCityFragment"
+        tools:layout="@layout/fragment_search_city">
+        <action
+            android:id="@+id/action_searchCityFragment_to_cityWeatherFragment"
+            app:destination="@id/cityWeatherFragment" >
+            <argument
+                android:name="cityId"
+                app:argType="integer"
+                android:defaultValue="0"/>
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/cityWeatherFragment"
+        android:name="com.mpaja.weatherapplication.ui.cityweather.CityWeatherFragment"
+        android:label="CityWeatherFragment"
+        tools:layout="@layout/fragment_city_weather"/>
+</navigation>
