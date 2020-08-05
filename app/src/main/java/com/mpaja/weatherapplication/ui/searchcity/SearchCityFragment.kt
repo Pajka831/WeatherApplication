@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.appcompat.widget.SearchView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -57,10 +59,6 @@ class SearchCityFragment : Fragment(), Injectable, CityListRVAdapter.OnItemClick
 
         search_city.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextChange(newText: String?): Boolean {
-                if (!newText.isNullOrEmpty()) {
-
-                    return true
-                }
                 return false
             }
 
@@ -90,11 +88,35 @@ class SearchCityFragment : Fragment(), Injectable, CityListRVAdapter.OnItemClick
         viewModel.getHistory()
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        requireActivity().onBackPressedDispatcher
+            .addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (recycler_cities.visibility == View.VISIBLE) {
+                        recycler_cities.visibility = View.INVISIBLE
+                        recycler_history.visibility = View.VISIBLE
+                        search_city.setQuery("", false)
+                    } else requireActivity().finish()
+                }
+            })
+    }
+
     private fun prepareRecyclerViews() {
+        val dividerItemDecoration = DividerItemDecoration(
+            context,
+            LinearLayoutManager.VERTICAL
+        )
+        getDrawable(
+            requireContext(),
+            R.drawable.divider_layer
+        )?.let { dividerItemDecoration.setDrawable(it) }
+
         cityListRVAdapter = CityListRVAdapter()
         recycler_cities.adapter = cityListRVAdapter
         recycler_cities.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        recycler_cities.addItemDecoration(dividerItemDecoration)
 
         cityListRVAdapter.onItemClickedListener = this
 
@@ -102,11 +124,9 @@ class SearchCityFragment : Fragment(), Injectable, CityListRVAdapter.OnItemClick
         recycler_history.adapter = historyListRVAdapter
         recycler_history.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+
         recycler_history.addItemDecoration(
-            DividerItemDecoration(
-                context,
-                LinearLayoutManager.VERTICAL
-            )
+            dividerItemDecoration
         )
         historyListRVAdapter.onHistoryItemClickListener = this
     }
@@ -150,7 +170,7 @@ class SearchCityFragment : Fragment(), Injectable, CityListRVAdapter.OnItemClick
                 }
             }
         })
-        viewModel.errorLiveData.observe(viewLifecycleOwner, EventObserver{
+        viewModel.errorLiveData.observe(viewLifecycleOwner, EventObserver {
             Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
         })
     }
